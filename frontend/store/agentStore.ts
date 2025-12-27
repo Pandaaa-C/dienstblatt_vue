@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { IAgentData } from '@shared/interfaces/agentData';
+import type { IAgentData } from '@shared/interfaces/agentData';
 
 export const useAgentStore = defineStore('agent', {
     state: () => ({
@@ -17,6 +17,7 @@ export const useAgentStore = defineStore('agent', {
             lastUprank: '',
             note: '',
             divisions: [],
+            streaming: false,
         } as IAgentData,
         agents: [] as IAgentData[],
     }),

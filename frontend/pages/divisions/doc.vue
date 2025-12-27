@@ -38,7 +38,7 @@
 import { useDocStore } from '@/store/docStore';
 import DocAddRecordComponent from '@/components/divisions/DocAddRecordComponent.vue';
 import DocViewRecordComponent from '@/components/divisions/DocViewRecordComponent.vue';
-import { IDocFileData } from '@/../shared/interfaces';
+import type { IDocFileData } from '@/../shared/interfaces';
 import { apiUrl } from '@/config';
 import { useComponentStore } from '@/store/componentStore';
 import { useAgentStore } from '@/store/agentStore';
@@ -63,7 +63,6 @@ let viewComponentItem: any = null;
 
 const textContent = (item: IDocFileData): string => {
     let returnText = '';
-
 
     for (let i = 0; i <= (item.content.length > 30 ? 15 : 2); i++) {
         returnText += item.content[i];
@@ -108,7 +107,7 @@ const updateRecord = async (recordId: string, isOpen: boolean) => {
         })
     ).data.value as { message: string };
 
-    componentStore.notify(response.message);
+    componentStore.sendNotification(response.message);
 };
 </script>
 

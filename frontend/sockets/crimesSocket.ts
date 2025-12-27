@@ -1,6 +1,6 @@
 import { NetSocket, SocketHandler } from './socketHandler';
 import { useCrimesStore } from '@/store/crimeStore';
-import { ICrimesData } from '@/../shared/interfaces';
+import type { ICrimesData } from '@/../shared/interfaces';
 
 const crimesSocket = new NetSocket('crimesSocket');
 

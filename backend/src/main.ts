@@ -8,7 +8,7 @@ async function bootstrap() {
     config();
     const app = await NestFactory.create(AppModule);
 
-    await app.enableCors({
+    app.enableCors({
         credentials: true,
         maxAge: 60 * 60 * 24 * 7,
         origin: process.env.FRONTEND_URL,

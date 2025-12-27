@@ -48,7 +48,7 @@ let passwordInput2 = ref('').value;
 
 const changePassword = async (): Promise<void> => {
     if (passwordInput !== passwordInput2) {
-        componentStore.notify('Passwörter stimmen nicht überein');
+        componentStore.sendNotification('Passwörter stimmen nicht überein');
         return;
     }
 
@@ -62,7 +62,7 @@ const changePassword = async (): Promise<void> => {
         })
     ).data.value as { message: string };
 
-    componentStore.notify(response.message);
+    componentStore.sendNotification(response.message);
 
     passwordInput = '';
     passwordInput2 = '';
@@ -90,7 +90,7 @@ const resetPassword = async (): Promise<void> => {
         })
     ).data.value as { message: string };
 
-    componentStore.notify(response.message);
+    componentStore.sendNotification(response.message);
 
     resetPasswordInput = '';
 };
@@ -107,7 +107,7 @@ const addVehicle = async (): Promise<void> => {
         })
     ).data.value as { message: string };
 
-    componentStore.notify(response.message);
+    componentStore.sendNotification(response.message);
 
     vehicleAddName = '';
     vehicleAddId = undefined;
@@ -125,7 +125,7 @@ const addFaction = async (): Promise<void> => {
         })
     ).data.value as { message: string };
 
-    componentStore.notify(response.message);
+    componentStore.sendNotification(response.message);
 
     factionName = '';
     factionShortName = '';

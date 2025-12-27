@@ -36,10 +36,10 @@ definePageMeta({
 const unitStore = useUnitStore();
 const componentStore = useComponentStore();
 
-const units = $computed(() => unitStore.getUnits);
-const isEditorMode = $computed(() => componentStore.getEditorMode);
-const isUnitMode = $computed(() => componentStore.getAddUnitMode);
-const isUnitUpdateMode = $computed(() => componentStore.getUpdateUnitMode);
+const units = computed(() => unitStore.getUnits);
+const isEditorMode = computed(() => componentStore.editorMode);
+const isUnitMode = computed(() => componentStore.addUnitMode);
+const isUnitUpdateMode = computed(() => componentStore.updateUnitMode);
 
 let updatingUnit = ref<any>().value;
 

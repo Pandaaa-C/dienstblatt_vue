@@ -18,7 +18,7 @@
 </template>
 
 <script setup lang="ts">
-import { IAgentData } from '@/../shared/interfaces';
+import type { IAgentData } from '@/../shared/interfaces';
 import { apiUrl } from '@/config';
 import '@/sockets/index';
 import { useAgentStore } from '@/store/agentStore';
@@ -32,7 +32,7 @@ const tabs = ref([
     { route: '/dashboard/agents', class: 'fa-solid fa-list' },
     { route: '/divisions/doc', class: 'fa-solid fa-file' },
     { route: '/dashboard/settings', class: 'fa-solid fa-gears' },
-    { route: '/auth/logout', class: 'fa-solid fa-right-from-bracket' }
+    { route: '/auth/logout', class: 'fa-solid fa-right-from-bracket' },
 ]).value;
 
 const activeRoute = computed(() => router.currentRoute.value.fullPath);
@@ -43,18 +43,18 @@ const gotoPage = (page: string): void => {
 };
 
 onMounted(() => {
-    setTimeout(async() => {
+    setTimeout(async () => {
         const cookies = useCookie('login_token');
         const loginToken = cookies.value;
         const response: IAgentData = (
-            await useFetch(apiUrl + "/auth/verify", {
-                method: "POST",
+            await useFetch(apiUrl + '/auth/verify', {
+                method: 'POST',
                 body: {
-                    token: loginToken
-                }
+                    token: loginToken,
+                },
             })
         ).data.value as IAgentData;
-        
+
         agentStore.initializeAgentInfo(response);
     }, 0);
 });

@@ -1,6 +1,5 @@
 import { NetSocket, SocketHandler } from './socketHandler';
-import { useCrimesStore } from '@/store/crimeStore';
-import { ICrimesData, IDocFileData } from '@/../shared/interfaces';
+import type { IDocFileData } from '@/../shared/interfaces';
 import { useDocStore } from '@/store/docStore';
 
 const docSocket = new NetSocket('docSocket');

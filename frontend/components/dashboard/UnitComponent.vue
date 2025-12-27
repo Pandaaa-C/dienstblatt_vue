@@ -1,6 +1,6 @@
 <template>
     <div :class="`component activity-${activityOptions[unit.activity]}`">
-        <h1 :class="{pointer: isEditorMode}" @click="changeName()">{{ unit.name }}</h1>
+        <h1 :class="{ pointer: isEditorMode }" @click="changeName()">{{ unit.name }}</h1>
         <i class="fa-solid fa-xmark delete-unit" @click="deleteUnit()" v-if="isEditorMode"></i>
         <div class="row space">
             <p>Tätigkeit:</p>
@@ -27,15 +27,15 @@
             <p class="name">{{ agent.name }}</p>
             <p class="number">{{ agent.telefonNumber }}</p>
             <div class="right-wrapper">
-                <i class="fa-brands fa-twitch" style="color: rgb(155, 0, 200);" v-if="agent.streaming"></i>
-                <i class="fa-solid fa-star delete" style="font-size: 0.9vh; right: 5%; color: yellow;" v-if="agent.rank >= 10"></i>
+                <i class="fa-brands fa-twitch" style="color: rgb(155, 0, 200)" v-if="agent.streaming"></i>
+                <i class="fa-solid fa-star delete" style="font-size: 0.9vh; right: 5%; color: yellow" v-if="agent.rank >= 10"></i>
                 <i @click="removeAgentFromUnit(agent._id)" v-if="isEditorMode" class="fa-solid fa-xmark delete"></i>
             </div>
         </div>
         <input type="text" placeholder="Agent hinzufügen" v-model="agentName" @keyup="onAddAgentKeyup" v-if="isEditorMode" />
         <div class="live" v-if="isEditorMode">
             <p>Live Streaming</p>
-            <input type="checkbox" v-model="agentLive"/>
+            <input type="checkbox" v-model="agentLive" />
         </div>
     </div>
 </template>
@@ -50,35 +50,52 @@ const { unit, onUpdate } = defineProps(['unit', 'onUpdate']);
 
 const componentStore = useComponentStore();
 const agentStore = useAgentStore();
-const isEditorMode = $computed(() => useComponentStore().getEditorMode);
+const isEditorMode = computed(() => useComponentStore().editorMode);
 
-const activityOptions = ['Streifendienst', 'HQ', 'Einsatz', 'Abteilung', 'Aktenklärung', 'Ausbildung', 'Einsatzleitung', 'Besprechung', 'Entführt', 'EST', 'Funk Aus', 'Büro', 'LSPD', 'Overwatch', 'Wanteds', 'Zivil', 'Parlament'];
-const vehicles = $computed(() => useVehicleStore().getVehicles);
+const activityOptions = [
+    'Streifendienst',
+    'HQ',
+    'Einsatz',
+    'Abteilung',
+    'Aktenklärung',
+    'Ausbildung',
+    'Einsatzleitung',
+    'Besprechung',
+    'Entführt',
+    'EST',
+    'Funk Aus',
+    'Büro',
+    'LSPD',
+    'Overwatch',
+    'Wanteds',
+    'Zivil',
+    'Parlament',
+];
+const vehicles = computed(() => useVehicleStore().getVehicles);
 
 let agentName = ref('').value;
 let agentLive = ref(false).value;
 let currentActivity = unit.activity;
-let currentVehicleIndex = $computed(() => {
-    return vehicles.findIndex(x => x.vehicleId == unit.vehicle)
+let currentVehicleIndex = computed(() => {
+    return vehicles.value.findIndex(x => x.vehicleId == unit.vehicle);
 });
 
 const changeName = (): void => {
-    if(!isEditorMode) return;
+    if (!isEditorMode) return;
 
     onUpdate(unit);
     useComponentStore().setUpdateUnitMode(true);
-}
+};
 
 const selectActivity = async (activityIndex: number): Promise<void> => {
     currentActivity = activityIndex;
-    
 
     const response: { message: string } = (
         await useFetch(apiUrl + '/units/updateUnit', {
             method: 'POST',
             body: {
                 _id: unit._id,
-                unitVehicle: vehicles[currentVehicleIndex] == null ? -1 : vehicles[currentVehicleIndex].vehicleId,
+                unitVehicle: vehicles[currentVehicleIndex.value] == null ? -1 : vehicles[currentVehicleIndex.value].vehicleId,
                 unitActivity: currentActivity,
                 initiator: agentStore.agentInfo.name,
             },
@@ -127,7 +144,7 @@ const addAgent = async (): Promise<void> => {
                 unitId: unit._id,
                 agentName: agentName,
                 agentId: agentStore.agentInfo._id,
-                agentLive: agentLive
+                agentLive: agentLive,
             },
         })
     ).data.value as { message: string };
@@ -151,7 +168,7 @@ const removeAgentFromUnit = async (agentName: string): Promise<void> => {
                 initiator: agentStore.agentInfo.name,
                 unitId: unit._id,
                 agentName: agentName,
-                agentId: agentStore.agentInfo._id
+                agentId: agentStore.agentInfo._id,
             },
         })
     ).data.value as { message: string };
@@ -319,7 +336,7 @@ const removeAgentFromUnit = async (agentName: string): Promise<void> => {
         }
     }
 
-    >input {
+    > input {
         width: 95%;
         height: 1vw;
         margin-left: 2.5%;

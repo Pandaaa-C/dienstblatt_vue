@@ -24,7 +24,7 @@
         <p class="name">{{ item.name }}</p>
         <p class="jailtime">{{ item.jailtime }}</p>
         <p class="reduction">{{ item.reduction }}</p>
-        <p class="agent">{{ item.agent }}</p>
+        <p class="agent">{{ item.agentName }}</p>
         <p class="reason">{{ item.reason }}</p>
       </div>
     </div>
@@ -35,8 +35,6 @@
 import {apiUrl} from '@/config';
 import {useAgentStore} from '@/store/agentStore';
 import {useComponentStore} from '@/store/componentStore';
-import {useCrimesStore} from '@/store/crimeStore';
-import {useFactionsStore} from '@/store/factionsStore';
 import {useLiabilityStore} from "@/store/liabilityStore";
 
 definePageMeta({
@@ -47,7 +45,6 @@ definePageMeta({
 const liabilityStore = useLiabilityStore();
 const componentStore = useComponentStore();
 const agentStore = useAgentStore();
-const factionsStore = useFactionsStore();
 const liabilityReductions = [
   '5 Hafteinheiten',
   '10 Hafteinheiten',
@@ -75,7 +72,7 @@ const liabilities = computed(() => {
 
 const addReduction = async (): Promise<void> => {
   if (name == '' || liabilityReduction == '') {
-    componentStore.notify("Du musst ein Namen eingeben und eine Haftminderung auswählen!");
+    componentStore.sendNotification("Du musst ein Namen eingeben und eine Haftminderung auswählen!");
     return;
   }
 
@@ -92,7 +89,7 @@ const addReduction = async (): Promise<void> => {
       })
   ).data.value as { message: string };
 
-  componentStore.notify(response.message);
+  componentStore.sendNotification(response.message);
 
   if (response.message.toLocaleLowerCase().includes('erfolgreich')) {
     name = '';
@@ -103,7 +100,7 @@ const addReduction = async (): Promise<void> => {
 };
 
 const selectReduction = (index: number): void => {
-  liabilityReduction = liabilityReductions[index];
+  liabilityReduction = liabilityReductions[index] as string;
 };
 </script>
 

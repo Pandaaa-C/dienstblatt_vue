@@ -1,4 +1,4 @@
-import { IVehicleData } from '@/../shared/interfaces';
+import type { IVehicleData } from '@/../shared/interfaces';
 import { NetSocket, SocketHandler } from './socketHandler';
 import { useVehicleStore } from '@/store/vehiclesStore';
 

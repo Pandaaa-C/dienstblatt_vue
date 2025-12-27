@@ -1,4 +1,4 @@
-import { io, Socket, SocketOptions, ManagerOptions } from 'socket.io-client';
+import { io, Socket, type SocketOptions, type ManagerOptions } from 'socket.io-client';
 import { apiUrl } from '../config';
 
 export class NetSocket {

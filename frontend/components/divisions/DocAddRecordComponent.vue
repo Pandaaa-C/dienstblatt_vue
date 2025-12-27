@@ -47,11 +47,11 @@ const teams = [
 ];
 
 const name = ref('').value;
-let team = '';
+let team: string | undefined ='';
 const info = ref('').value;
 
 const onSelectTeam = (index: number): void => {
-    team = teams[index];
+    team = teams.at(index);
 }
 
 const createRecord = async (): Promise<void> => {
@@ -69,7 +69,7 @@ const createRecord = async (): Promise<void> => {
         })
     ).data.value as { message: string}
 
-    componentStore.notify(response.message);
+    componentStore.sendNotification(response.message);
 }
 </script>
 

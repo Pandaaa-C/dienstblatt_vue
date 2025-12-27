@@ -1,6 +1,5 @@
-import { useUnitStore } from '@/store/unitStore';
 import { NetSocket, SocketHandler } from './socketHandler';
-import { IAgentData } from '@/../shared/interfaces';
+import type { IAgentData } from '@/../shared/interfaces';
 import { useAgentStore } from '@/store/agentStore';
 
 const agentSocket = new NetSocket('agentSocket');
@@ -19,6 +18,6 @@ if (SocketHandler.addSocket(agentSocket)) {
     });
 
     agentSocket.on('deleteAgent', (agent: IAgentData) => {
-        agentStore.deleteAgent(agent);
+        agentStore.deleteAgent(agent._id);
     });
 }

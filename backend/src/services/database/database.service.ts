@@ -35,7 +35,7 @@ export class DatabaseService {
                 this.database = this.client.db('copnet');
                 this.initialized = true;
 
-                this.userCollection = new NetCollection(this.database.collection(' '));
+                this.userCollection = new NetCollection(this.database.collection('users'));
                 this.vehicleCollection = new NetCollection(this.database.collection('vehicles'));
                 this.infoCollection = new NetCollection(this.database.collection('info'));
                 this.unitCollection = new NetCollection(this.database.collection('units'));

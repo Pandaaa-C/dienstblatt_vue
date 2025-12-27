@@ -1,5 +1,5 @@
 import { NetSocket, SocketHandler } from './socketHandler';
-import {ILiabilityData} from "@shared";
+import type { ILiabilityData } from '@shared';
 import {useLiabilityStore} from "@/store/liabilityStore";
 
 const liabilitySocket = new NetSocket('liabilitySocket');

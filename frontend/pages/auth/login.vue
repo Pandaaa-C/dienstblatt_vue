@@ -18,14 +18,14 @@ definePageMeta({
     middleware: ['router-check'],
 });
 
-const username: string = ref('').value;
-const password: string = ref('').value;
+const username: Ref<string, string> = ref('');
+const password: Ref<string, string> = ref('');
 const router = useRouter();
 
 const componentStore = useComponentStore();
 
 const submit = async (): Promise<void> => {
-    if (username.length < 1 || password.length < 1) {
+    if (username.value.length < 1 || password.value.length < 1) {
         componentStore.sendNotification('Es müssen alle Felder ausgefüllt sein!');
         return;
     }
@@ -36,8 +36,8 @@ const submit = async (): Promise<void> => {
         method: 'post',
         credentials: 'include',
         body: {
-            username: username,
-            password: password,
+            username: username.value,
+            password: password.value,
         },
     });
 
