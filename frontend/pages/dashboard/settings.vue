@@ -115,7 +115,7 @@ const addVehicle = async (): Promise<void> => {
 
 const addFaction = async (): Promise<void> => {
     const response: { message: string } = (
-        await useFetch(apiUrl + '/factions/addFaction', {
+        await $fetch<{ message: string }>(apiUrl + '/factions/addFaction', {
             method: 'POST',
             body: {
                 agentId: agentStore.agentInfo._id,
@@ -123,7 +123,7 @@ const addFaction = async (): Promise<void> => {
                 shortName: factionShortName,
             },
         })
-    ).data.value as { message: string };
+    );
 
     componentStore.sendNotification(response.message);
 

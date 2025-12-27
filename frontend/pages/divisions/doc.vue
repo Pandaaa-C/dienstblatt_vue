@@ -98,14 +98,14 @@ const updateRecord = async (recordId: string, isOpen: boolean) => {
     if (!isOpen) return false;
 
     const response: { message: string } = (
-        await useFetch(apiUrl + '/doc/updateFile', {
+        await $fetch<{ message: string }>(apiUrl + '/doc/updateFile', {
             method: 'POST',
             body: {
                 recordId: recordId,
                 agentId: agentStore.agentInfo._id,
             },
         })
-    ).data.value as { message: string };
+    )
 
     componentStore.sendNotification(response.message);
 };
