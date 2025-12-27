@@ -24,8 +24,6 @@ export class LiabilityController {
     async updateLiabilities() {
         const reductions = await this.databaseService.liabilityCollection.getAllModels();
 
-        console.log(reductions);
-
         await this.liabilityGateway.emit('initializeReductions', reductions);
     }
 }
