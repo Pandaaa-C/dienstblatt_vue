@@ -1,33 +1,34 @@
+// store/componentStore.ts
 import { defineStore } from 'pinia';
+
+type Notification = {
+    id: string;
+    message: string;
+    createdAt: number;
+};
 
 export const useComponentStore = defineStore('component', {
     state: () => ({
-        notify: (message: string) => {},
+        notifications: [] as Notification[],
         loadingActive: false,
         editorMode: false,
         addUnitMode: false,
-        updateUnitMode: false
+        updateUnitMode: false,
     }),
-    getters: {
-        getEditorMode(state): boolean {
-            return state.editorMode;
-        },
-        getAddUnitMode(state): boolean {
-            return state.addUnitMode;
-        },
-        getUpdateUnitMode(state): boolean {
-            return state.updateUnitMode;
-        },
-    },
     actions: {
-        setNotifyFunction(notifyFunc: (message: string) => void) {
-            this.notify = notifyFunc;
+        sendNotification(message: string) {
+            this.notifications.push({
+                id: crypto.randomUUID(),
+                message,
+                createdAt: Date.now(),
+            });
+        },
+        removeNotification(id: string) {
+            const i = this.notifications.findIndex(n => n.id === id);
+            if (i !== -1) this.notifications.splice(i, 1);
         },
         setLoadingComponentActive(active: boolean) {
             this.loadingActive = active;
-        },
-        sendNotification(message: string) {
-            this.notify(message);
         },
         setEditorMode(active: boolean) {
             this.editorMode = active;

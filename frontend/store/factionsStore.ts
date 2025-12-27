@@ -1,4 +1,4 @@
-import { IFactionsData } from '@/../shared/interfaces';
+import type { IFactionsData } from '@/../shared/interfaces';
 import { defineStore } from 'pinia';
 
 export const useFactionsStore = defineStore('factions', {

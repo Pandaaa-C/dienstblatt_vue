@@ -1,4 +1,4 @@
-import { ICrimesData } from '@/../shared/interfaces';
+import type { ICrimesData } from '@/../shared/interfaces';
 import { defineStore } from 'pinia';
 
 export const useCrimesStore = defineStore('crimes', {

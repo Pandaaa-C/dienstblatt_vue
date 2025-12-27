@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
-import { IUnitData } from '@shared/interfaces/unitData';
-import { IAgentData } from '@/../shared/interfaces';
+import type { IUnitData } from '@shared/interfaces/unitData';
+import type { IAgentData } from '@/../shared/interfaces';
 
 export const useUnitStore = defineStore('units', {
     state: () => ({
@@ -35,21 +35,24 @@ export const useUnitStore = defineStore('units', {
         },
         removeAgentFromUnit(unitId: string, agentName: string): void {
             const index = this.units.findIndex(searchedUnit => searchedUnit._id.toString() === unitId);
-
             if (index === -1) return;
 
-            const agentIndex = this.units[index].agents.findIndex(agent => agent.name === agentName);
+            const unit = this.units[index];
+            if (unit == null) return;
 
+            const agentIndex = unit.agents.findIndex(agent => agent.name === agentName);
             if (agentIndex === -1) return;
 
-            this.units[index].agents.splice(agentIndex, 1);
+            unit.agents.splice(agentIndex, 1);
         },
         addAgentToUnit(unitId: string, agentData: IAgentData): void {
             const index = this.units.findIndex(searchedUnit => searchedUnit._id.toString() === unitId);
-
             if (index === -1) return;
-            
-            this.units[index].agents.push(agentData);
+
+            const unit = this.units[index];
+            if (unit == null) return;
+
+            unit.agents.push(agentData);
         },
     },
 });

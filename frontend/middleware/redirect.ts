@@ -1,4 +1,4 @@
-import { RouteLocation } from 'vue-router';
+import type { RouteLocation } from 'vue-router';
 
 export default defineNuxtRouteMiddleware(async (to: RouteLocation, from: RouteLocation) => {
     const cookies = useCookie('login_token');

@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia';
-import { IUnitData } from '@shared/interfaces/unitData';
 
 export const useGeneralStore = defineStore('general', {
     state: () => ({

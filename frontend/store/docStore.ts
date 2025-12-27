@@ -1,4 +1,4 @@
-import { IDocFileData } from '@/../shared/interfaces';
+import type { IDocFileData } from '@/../shared/interfaces';
 import { defineStore } from 'pinia';
 
 export const useDocStore = defineStore('doc', {

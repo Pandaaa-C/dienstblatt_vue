@@ -1,6 +1,6 @@
 import { NetSocket, SocketHandler } from './socketHandler';
 import { useAgentStore } from '@/store/agentStore';
-import { IAgentData, ICrimesData, IDocFileData } from '@/../shared/interfaces';
+import type { IAgentData, ICrimesData, IDocFileData } from '@/../shared/interfaces';
 import { useCrimesStore } from '@/store/crimeStore';
 import { useDocStore } from '@/store/docStore';
 

@@ -13,7 +13,6 @@
 import { apiUrl } from '@/config';
 import { useAgentStore } from '@/store/agentStore';
 import { useComponentStore } from '@/store/componentStore';
-import { IUnitData } from '@shared/interfaces';
 
 const name = ref('').value;
 const agentStore = useAgentStore();

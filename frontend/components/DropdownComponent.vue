@@ -1,48 +1,77 @@
 <template>
-    <div class="component" @click="open()">
+    <div class="component" @click="open">
         <p>{{ options[activeIndex] }}</p>
         <i class="fa-solid fa-chevron-down"></i>
 
         <div class="options" v-if="isOpen">
             <input dropdown-whitelist type="text" placeholder="Filter" v-model="filter" />
+
             <div class="list">
-                <p v-for="(item, index) in getFilteredOptions" :key="index" @click="select(item)">{{ item }}</p>
+                <p v-for="(item, index) in getFilteredOptions" :key="index" dropdown-whitelist @click.stop="select(item)">
+                    {{ item }}
+                </p>
             </div>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-const { options, onSelect, currentIndex } = defineProps(['options', 'onSelect', 'currentIndex']);
-let activeIndex = computed(() => currentIndex);
-let isOpen = ref(false).value;
-let filter = ref('').value;
+import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue';
+
+const props = defineProps<{
+    options: string[];
+    onSelect: (index: number) => void;
+    currentIndex: number;
+}>();
+
+const activeIndex = ref(props.currentIndex);
+const isOpen = ref(false);
+const filter = ref('');
+
+watch(
+    () => props.currentIndex,
+    v => {
+        activeIndex.value = v;
+    },
+);
 
 const open = (): void => {
-    if (isOpen) return;
-
-    setTimeout(() => (isOpen = true), 0);
+    if (isOpen.value) return;
+    queueMicrotask(() => (isOpen.value = true));
 };
 
-const select = (item: any): void => {
-    const index = options.indexOf(item);
-    onSelect(index);
-    activeIndex = index;
-    filter = '';
+const select = (item: string): void => {
+    const index = props.options.indexOf(item);
+    if (index === -1) return;
+
+    props.onSelect(index);
+    activeIndex.value = index;
+    filter.value = '';
+    isOpen.value = false;
 };
 
 const onClick = (event: MouseEvent): void => {
-    if (!isOpen || (event.target as HTMLElement).getAttribute('dropdown-whitelist') != null) return;
+    if (!isOpen.value) return;
 
-    isOpen = false;
+    const target = event.target as HTMLElement;
+
+    if (target.closest('[dropdown-whitelist]')) return;
+    if (target.closest('.component')) return;
+
+    isOpen.value = false;
 };
 
 const getFilteredOptions = computed((): string[] => {
-    return options.filter((x: string) => x.toLowerCase().includes(filter.toLowerCase()));
+    const f = filter.value.toLowerCase();
+    return props.options.filter(x => x.toLowerCase().includes(f));
 });
 
 onMounted(() => {
     document.addEventListener('click', onClick);
+});
+
+onBeforeUnmount(() => {
+    document.removeEventListener('click', onClick);
 });
 </script>
 

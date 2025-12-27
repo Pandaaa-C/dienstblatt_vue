@@ -1,7 +1,7 @@
 import { useUnitStore } from '@/store/unitStore';
 import { NetSocket, SocketHandler } from './socketHandler';
-import { IUnitData } from '@/../shared/interfaces/unitData';
-import { IAgentData } from '@/../shared/interfaces';
+import type { IUnitData } from '@/../shared/interfaces/unitData';
+import type { IAgentData } from '@/../shared/interfaces';
 
 const unitSocket = new NetSocket('unitSocket');
 

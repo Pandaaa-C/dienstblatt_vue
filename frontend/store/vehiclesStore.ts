@@ -1,4 +1,4 @@
-import { IVehicleData } from '@shared/interfaces/vehicleData';
+import type { IVehicleData } from '@shared/interfaces/vehicleData';
 
 export const useVehicleStore = defineStore('vehicles.store', {
     state: () => ({

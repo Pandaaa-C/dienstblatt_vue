@@ -12,8 +12,13 @@
         </div>
         <div>
             <p>DEFCON</p>
-            <input :class="`defcon-${generalInfo.defcon}`" placeholder="5" v-model="generalInfo.defcon"
-                :readonly="!adminPermission" @blur="updateDefcon()" />
+            <input
+                :class="`defcon-${generalInfo.defcon}`"
+                placeholder="5"
+                v-model="generalInfo.defcon"
+                :readonly="!adminPermission"
+                @blur="updateDefcon()"
+            />
         </div>
         <div>
             <p>FUNK</p>
@@ -30,9 +35,16 @@
         <div>
             <p>EINSATZ</p>
             <h2
-                :style="{ color: ((operationAgents != null ? operationAgents : 0) + (operationOfficers != null ? operationOfficers : 0)) > generalInfo.maxEinsatz ? 'red' : 'white' }">
-                {{ (operationAgents != null ? operationAgents : 0) + (operationOfficers != null ? operationOfficers : 0)
-                }} / 25</h2>
+                :style="{
+                    color:
+                        (operationAgents != null ? operationAgents : 0) + (operationOfficers != null ? operationOfficers : 0) >
+                        generalInfo.maxEinsatz
+                            ? 'red'
+                            : 'white',
+                }"
+            >
+                {{ (operationAgents != null ? operationAgents : 0) + (operationOfficers != null ? operationOfficers : 0) }} / 25
+            </h2>
         </div>
         <div>
             <p>HQ</p>
@@ -44,11 +56,19 @@
         </div>
         <div>
             <p>SWAT</p>
-          <h2 v-if="generalInfo.swat != undefined && generalInfo.swat.toLocaleLowerCase() == 'aktiv'" style="color: #15ff00">{{ generalInfo.swat }}</h2>
-          <h2 v-else-if="generalInfo.swat != undefined && generalInfo.swat.toLocaleLowerCase() == 'inaktiv'" style="color: red">{{ generalInfo.swat }}</h2>
-          <h2 v-else-if="generalInfo.swat != undefined && generalInfo.swat.toLocaleLowerCase() == 'abrüsten'" style="color: deepskyblue">{{ generalInfo.swat }}</h2>
-          <h2 v-else-if="generalInfo.swat != undefined && generalInfo.swat.toLocaleLowerCase() == 'ausgerufen'" style="color: orange">{{ generalInfo.swat }}</h2>
-          <h2 v-else style="color: red">Loading...</h2>
+            <h2 v-if="generalInfo.swat != undefined && generalInfo.swat.toLocaleLowerCase() == 'aktiv'" style="color: #15ff00">
+                {{ generalInfo.swat }}
+            </h2>
+            <h2 v-else-if="generalInfo.swat != undefined && generalInfo.swat.toLocaleLowerCase() == 'inaktiv'" style="color: red">
+                {{ generalInfo.swat }}
+            </h2>
+            <h2 v-else-if="generalInfo.swat != undefined && generalInfo.swat.toLocaleLowerCase() == 'abrüsten'" style="color: deepskyblue">
+                {{ generalInfo.swat }}
+            </h2>
+            <h2 v-else-if="generalInfo.swat != undefined && generalInfo.swat.toLocaleLowerCase() == 'ausgerufen'" style="color: orange">
+                {{ generalInfo.swat }}
+            </h2>
+            <h2 v-else style="color: red">Loading...</h2>
         </div>
     </div>
 </template>
@@ -67,10 +87,10 @@ const unitStore = useUnitStore();
 const componentStore = useComponentStore();
 const crimeStore = useCrimesStore();
 
-const adminPermission = $computed(() => agentStore.$state.agentInfo.admin);
-const generalInfo = $computed(() => generalStore.getGeneralInfo);
-const operationOfficers = $computed(() => generalStore.generalInfo.currentOperationOfficer);
-const openCrimes = $computed(() => crimeStore.getCrimes.filter(x => !x.finished).length);
+const adminPermission = computed(() => agentStore.$state.agentInfo.admin);
+const generalInfo = computed(() => generalStore.getGeneralInfo);
+const operationOfficers = computed(() => generalStore.generalInfo.currentOperationOfficer);
+const openCrimes = computed(() => crimeStore.getCrimes.filter(x => !x.finished).length);
 
 const agents = computed((): number => {
     let count = 0;
@@ -85,7 +105,7 @@ const agents = computed((): number => {
 const patrolAgents = computed((): number | undefined => {
     let count = 0;
 
-    unitStore.units.forEach((unit) => {
+    unitStore.units.forEach(unit => {
         if (unit.activity == 0) {
             count += unit.agents.length;
         }
@@ -97,7 +117,7 @@ const patrolAgents = computed((): number | undefined => {
 const hqAgents = computed((): number | undefined => {
     let count = 0;
 
-    unitStore.units.forEach((unit) => {
+    unitStore.units.forEach(unit => {
         if (unit.activity == 1) {
             count += unit.agents.length;
         }
@@ -109,7 +129,7 @@ const hqAgents = computed((): number | undefined => {
 const operationAgents = computed((): number | undefined => {
     let count = 0;
 
-    unitStore.units.forEach((unit) => {
+    unitStore.units.forEach(unit => {
         if (unit.activity == 2) {
             count += unit.agents.length;
         }
@@ -135,12 +155,12 @@ const updateDefcon = async (): Promise<void> => {
     if (!adminPermission) return;
 
     const response: { message: string } = (
-        await useFetch(apiUrl + "/info/updateDefconLevel", {
-            method: "POST",
+        await useFetch(apiUrl + '/info/updateDefconLevel', {
+            method: 'POST',
             body: {
                 initiator: agentStore.agentInfo.name,
-                defcon: generalInfo.defcon
-            }
+                defcon: generalInfo.value.defcon,
+            },
         })
     ).data.value as { message: string };
 
@@ -151,12 +171,12 @@ const updateFunk = async (): Promise<void> => {
     if (!adminPermission) return;
 
     const response: { message: string } = (
-        await useFetch(apiUrl + "/info/updateFunkCode", {
-            method: "POST",
+        await useFetch(apiUrl + '/info/updateFunkCode', {
+            method: 'POST',
             body: {
                 initiator: agentStore.agentInfo.name,
-                funk: generalInfo.funk
-            }
+                funk: generalInfo.value.funk,
+            },
         })
     ).data.value as { message: string };
 
@@ -167,12 +187,12 @@ const updateInfo = async (): Promise<void> => {
     if (!adminPermission) return;
 
     const response: { message: string } = (
-        await useFetch(apiUrl + "/info/updateGeneralInfo", {
-            method: "POST",
+        await useFetch(apiUrl + '/info/updateGeneralInfo', {
+            method: 'POST',
             body: {
                 initiator: agentStore.agentInfo.name,
-                message: generalInfo.globalInfo
-            }
+                message: generalInfo.value.globalInfo,
+            },
         })
     ).data.value as { message: string };
 

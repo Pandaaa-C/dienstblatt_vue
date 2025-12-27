@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import {ILiabilityData} from "@shared";
+import type { ILiabilityData } from '@shared';
 
 export const useLiabilityStore = defineStore('liability', {
     state: () => ({

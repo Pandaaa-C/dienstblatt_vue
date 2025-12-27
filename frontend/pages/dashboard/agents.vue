@@ -24,7 +24,13 @@
                     :readonly="!editingAgents.includes(item._id)"
                 />
                 <input class="phone" type="text" v-model="item.telefonNumber" :readonly="!editingAgents.includes(item._id)" />
-                <input class="duty-time" type="text" :value="dutyTime(item)" :readonly="!editingAgents.includes(item._id)" v-if="agentStore.getAgentInfo.admin"/>
+                <input
+                    class="duty-time"
+                    type="text"
+                    :value="dutyTime(item)"
+                    :readonly="!editingAgents.includes(item._id)"
+                    v-if="agentStore.getAgentInfo.admin"
+                />
                 <input class="join-date" type="text" v-model="item.entryDate" :readonly="!editingAgents.includes(item._id)" />
                 <input class="uprank-date" type="text" v-model="item.lastUprank" :readonly="!editingAgents.includes(item._id)" />
                 <div class="admin-wrapper">
@@ -52,7 +58,7 @@
 </template>
 
 <script setup lang="ts">
-import { IAgentData } from '@/../shared/interfaces';
+import type { IAgentData } from '@/../shared/interfaces';
 import { apiUrl } from '@/config';
 import { useAgentStore } from '@/store/agentStore';
 import { useComponentStore } from '@/store/componentStore';
@@ -91,7 +97,7 @@ let agentDN = ref('').value;
 let agentPhone = ref('').value;
 
 const toggleEditorMode = (id: string): void => {
-    if(editingAgents.includes(id)) {
+    if (editingAgents.includes(id)) {
         editingAgents.splice(editingAgents.indexOf(id), 1);
         return;
     }
@@ -108,12 +114,12 @@ const addAgent = async (): Promise<void> => {
                 agentName: agentName,
                 agentRank: agentRank,
                 agentDN: agentDN,
-                agentPhone: agentPhone
+                agentPhone: agentPhone,
             },
         })
     ).data.value as { message: string };
 
-    componentStore.notify(response.message);
+    componentStore.sendNotification(response.message);
 };
 
 const deleteAgent = async (agentId: string): Promise<void> => {
@@ -127,7 +133,7 @@ const deleteAgent = async (agentId: string): Promise<void> => {
         })
     ).data.value as { message: string };
 
-    componentStore.notify(response.message);
+    componentStore.sendNotification(response.message);
 };
 
 const updateAgent = async (data: IAgentData): Promise<void> => {
@@ -142,7 +148,7 @@ const updateAgent = async (data: IAgentData): Promise<void> => {
     ).data.value as { message: string };
 
     toggleEditorMode(data._id);
-    componentStore.notify(response.message);
+    componentStore.sendNotification(response.message);
 };
 </script>
 

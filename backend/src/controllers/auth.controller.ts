@@ -23,11 +23,11 @@ export class AuthController {
 
             if (user == null || !(await compare(userData.password, user.password))) throw new UnauthorizedExeption('Falsches Password');
 
-            const jwt_token = sign({ data: user.uuid }, "F2cb0NwqggyP89TS1E0JSgz4KHyUFQ3l", {
+            const jwt_token = sign({ data: user.uuid }, process.env.JWT, {
                 expiresIn: '48h',
             });
 
-            const token = AES.encrypt(jwt_token, "g1fVH1pa9FfpwyzHyEXYJcgI9P0VBtBe").toString();
+            const token = AES.encrypt(jwt_token, process.env.AES).toString();
             response.cookie('login_token', token);
 
             return {
@@ -47,8 +47,8 @@ export class AuthController {
 
     @Post('verify')
     async verify(@Body() data: { token: string }) {
-        const aes_token: string = AES.decrypt(data.token, "g1fVH1pa9FfpwyzHyEXYJcgI9P0VBtBe").toString(enc.Utf8);
-        const userUuid: { data: string } = verify(aes_token, "F2cb0NwqggyP89TS1E0JSgz4KHyUFQ3l") as { data: string };
+        const aes_token: string = AES.decrypt(data.token, process.env.AES).toString(enc.Utf8);
+        const userUuid: { data: string } = verify(aes_token, process.env.JWT) as { data: string };
         const user = await this.databaseService.userCollection.getOneModel({ uuid: userUuid.data });
         if (user != null) {
             const agent: IAgentData = {
