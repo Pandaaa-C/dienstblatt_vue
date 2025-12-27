@@ -1,6 +1,14 @@
+
+
+@import "../fonts/fa/fa-all.css";
+@import "../fonts/fa/fa-sharp-solid.css";
+@import "../fonts/fa/fa-sharp-regular.css";
+@import "../fonts/fa/fa-sharp-light.css";
+@import "../fonts/fa/fa-duotone.css";
+
 @font-face {
     font-family: "Inter";
-    src: url("@/assets/fonts/inter/Inter-Regular.ttf");
+    src: url("../fonts/inter/Inter-Regular.ttf");
 }
 
 * {

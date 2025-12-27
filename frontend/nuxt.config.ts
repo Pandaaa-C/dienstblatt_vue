@@ -8,7 +8,6 @@ export default defineNuxtConfig({
     app: {
         head: {
             title: 'FIB Dienstblatt',
-            script: [{ src: 'https://kit.fontawesome.com/f4db06bba8.js', crossorigin: 'anonymous' }],
             link: [
                 {
                     rel: 'icon',
