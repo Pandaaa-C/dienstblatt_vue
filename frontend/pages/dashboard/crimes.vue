@@ -153,36 +153,34 @@ const blackMoneyAmount = computed((): number => {
 });
 
 const addCrime = async (): Promise<void> => {
-    if (name.value == '' || team == '') {
+    if (name.value === '' || team === '') {
         componentStore.sendNotification('Du musst ein Namen eingeben und Team auswählen!');
         return;
     }
 
-    const response: { message: string } = (
-        await useFetch(apiUrl + '/crimes/addCrime', {
-            method: 'POST',
-            body: {
-                name: name,
-                team: team,
-                location: location,
-                blackMoneyPerson: blackMoneyPerson,
-                blackMoneyVehicle: blackMoneyVehicle,
-                blackMoneyHouse: blackMoneyHouse,
-                bnc: bnc,
-                camper: camper,
-                mord: mord,
-                illegalItems: illegalItems,
-                proof1: proof1,
-                proof2: proof2,
-                proof3: proof3,
-                agentName: agentStore.agentInfo.name,
-            },
-        })
-    ).data.value as { message: string };
+    const response = await $fetch<{ message: string }>(apiUrl + '/crimes/addCrime', {
+        method: 'POST',
+        body: {
+            name: name.value,
+            team: team,
+            location: location.value,
+            blackMoneyPerson: blackMoneyPerson.value,
+            blackMoneyVehicle: blackMoneyVehicle.value,
+            blackMoneyHouse: blackMoneyHouse.value,
+            bnc: bnc.value,
+            camper: camper.value,
+            mord: mord.value,
+            illegalItems: illegalItems.value,
+            proof1: proof1.value,
+            proof2: proof2.value,
+            proof3: proof3.value,
+            agentName: agentStore.agentInfo.name,
+        },
+    });
 
     componentStore.sendNotification(response.message);
 
-    if (response.message.toLocaleLowerCase().includes('erfolgreich')) {
+    if (response.message.toLowerCase().includes('erfolgreich')) {
         name.value = '';
         team = '';
         location.value = '';
