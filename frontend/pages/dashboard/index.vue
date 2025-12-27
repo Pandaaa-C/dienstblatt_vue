@@ -48,7 +48,7 @@ const toggleAddUnitMode = (): void => {
 };
 
 const toggleEditor = (): void => {
-    componentStore.setEditorMode(!isEditorMode);
+    componentStore.setEditorMode(!isEditorMode.value);
 };
 
 const setUpdatingUnit = (unit: any): void => {
