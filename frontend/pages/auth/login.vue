@@ -12,7 +12,7 @@
 <script setup lang="ts">
 import { apiUrl } from '@/config';
 import { useComponentStore } from '@/store/componentStore.js';
-import { ILoginData } from '@shared/interfaces/loginData';
+import type { ILoginData } from '@shared/interfaces/loginData';
 
 definePageMeta({
     middleware: ['router-check'],

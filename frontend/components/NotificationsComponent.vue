@@ -1,7 +1,7 @@
 <template>
     <div class="component">
         <transition-group name="notify-anim">
-            <div class="notification" v-for="item in notifications" :key="item.id">
+            <div class="notification" v-for="item in store.notifications" :key="item.id">
                 <p>{{ item.message }}</p>
             </div>
         </transition-group>
@@ -9,31 +9,34 @@
 </template>
 
 <script setup lang="ts">
-import { useComponentStore } from '@/store/componentStore.js';
+import { useComponentStore } from '@/store/componentStore';
 
-let globalId = 0;
+const store = useComponentStore();
 
-const notifications = ref<Notification[]>([]).value;
+const TTL_MS = 4000;
+const timers = new Map<string, ReturnType<typeof setTimeout>>();
 
-const pushNotification = (message: string): void => {
-    const id = globalId++;
-    notifications.push({ id: id, message: message });
-    setTimeout(() => {
-        notifications.splice(
-            notifications.findIndex(x => x.id == id),
-            1,
-        );
-    }, 4000);
-};
+watch(
+    () => store.notifications.map(n => n.id),
+    () => {
+        for (const n of store.notifications) {
+            if (timers.has(n.id)) continue;
+            timers.set(
+                n.id,
+                setTimeout(() => {
+                    store.removeNotification(n.id);
+                    timers.delete(n.id);
+                }, TTL_MS),
+            );
+        }
+    },
+    { immediate: true },
+);
 
-onMounted(() => {
-    useComponentStore().setNotifyFunction(pushNotification);
+onBeforeUnmount(() => {
+    for (const t of timers.values()) clearTimeout(t);
+    timers.clear();
 });
-
-interface Notification {
-    id: number;
-    message: string;
-}
 </script>
 
 <style scoped lang="scss">

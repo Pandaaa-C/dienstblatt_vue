@@ -5,13 +5,13 @@ import { NetCollection } from './classes/netCollection';
 import { Crimes } from './entities/crimes';
 import { RecordFiles } from './entities/recordFiles';
 import { Logs } from './entities/logs';
-import {Liability} from "./entities/liability";
+import { Liability } from './entities/liability';
 
 @Injectable()
 export class DatabaseService {
     private client: MongoClient;
     private database: Db;
-    private initialized: boolean = false;
+    private initialized: boolean;
 
     public userCollection: NetCollection<Users>;
     public vehicleCollection: NetCollection<Vehicles>;
@@ -26,14 +26,16 @@ export class DatabaseService {
     constructor() {
         this.client = new MongoClient(process.env.MONGO_URI || 'mongodb://127.0.0.1:27017');
 
-        this.client.connect(err => {
-            if (err) {
-                console.error('Error connecting to database: ', err);
-            } else {
-                this.database = this.client.db('n_copnet');
+        this.client
+            .connect()
+            .catch(error => {
+                console.error('Error while connecting to database: ', error);
+            })
+            .then(() => {
+                this.database = this.client.db('copnet');
                 this.initialized = true;
 
-                this.userCollection = new NetCollection(this.database.collection('users'));
+                this.userCollection = new NetCollection(this.database.collection(' '));
                 this.vehicleCollection = new NetCollection(this.database.collection('vehicles'));
                 this.infoCollection = new NetCollection(this.database.collection('info'));
                 this.unitCollection = new NetCollection(this.database.collection('units'));
@@ -42,7 +44,6 @@ export class DatabaseService {
                 this.logCollection = new NetCollection(this.database.collection('logs'));
                 this.factionsCollection = new NetCollection(this.database.collection('factions'));
                 this.liabilityCollection = new NetCollection(this.database.collection('liability_reductions'));
-            }
-        });
+            });
     }
 }
