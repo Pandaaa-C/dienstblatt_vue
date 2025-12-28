@@ -130,14 +130,14 @@ const deleteUnit = async (): Promise<void> => {
 };
 
 const addAgent = async (): Promise<void> => {
-    const response: { message: string } = await $fetch<{ message: string }>(apiUrl + '/units/addAgentToUnit', {
+    const response: { message: string } = await $fetch(apiUrl + '/units/addAgentToUnit', {
         method: 'POST',
         body: {
             initiator: agentStore.agentInfo.name,
             unitId: unit._id,
             agentName: agentName.value,
             agentId: agentStore.agentInfo._id,
-            agentLive: agentLive,
+            agentLive: agentLive.value,
         },
     });
 

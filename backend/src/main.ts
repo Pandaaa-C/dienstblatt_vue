@@ -11,7 +11,7 @@ async function bootstrap() {
     app.enableCors({
         credentials: true,
         maxAge: 60 * 60 * 24 * 7,
-        origin: process.env.FRONTEND_URL,
+        origin: 'http://localhost:17220',
     });
 
     await app.use(cookieParser());
