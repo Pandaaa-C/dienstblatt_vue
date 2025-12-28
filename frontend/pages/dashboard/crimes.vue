@@ -132,11 +132,11 @@ let proof3 = ref('');
 const crimes = computed(() => {
     return searchInput.value.length < 1
         ? crimeStore.crimes.sort((a, b) => {
-            let aDate = new Date(a.dateTime)
-            let bDate = new Date(b.dateTime)
+              let aDate = formatDate(a.dateTime);
+              let bDate = formatDate(b.dateTime);
 
-            return bDate.getTime() - aDate.getTime();
-        })
+              return bDate - aDate;
+          })
         : crimeStore.crimes.filter(
               (x: any) =>
                   x.wantedName.toLowerCase().includes(searchInput.value.toLowerCase()) ||
@@ -200,6 +200,16 @@ const addCrime = async (): Promise<void> => {
         proof2.value = '';
         proof3.value = '';
     }
+};
+
+const formatDate = (_date: string): number => {
+    const [time, date] = _date.split(' ');
+    if (time === undefined || date === undefined) return -1;
+
+    const [hours, minutes, seconds] = time.split(':');
+    const [day, months, year] = date.split('/');
+
+    return new Date(Number(year), Number(months) - 1, Number(day), Number(hours), Number(minutes), Number(seconds)).getTime();
 };
 
 const updateCrime = async (crimeId: string, isOpen: boolean) => {
