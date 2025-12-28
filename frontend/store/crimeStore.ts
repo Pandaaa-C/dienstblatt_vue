@@ -13,7 +13,12 @@ export const useCrimesStore = defineStore('crimes', {
     },
     actions: {
         initializeCrimes(crimes: ICrimesData[]) {
-            this.crimes = crimes;
+            this.crimes = crimes.sort((a, b) => {
+                let aDate = new Date(a.dateTime);
+                let bDate = new Date(b.dateTime);
+
+                return bDate.getTime() - aDate.getTime();
+            });
         },
     },
 });
