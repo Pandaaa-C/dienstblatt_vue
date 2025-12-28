@@ -73,8 +73,8 @@ const activityOptions = [
 ];
 const vehicles = computed(() => useVehicleStore().getVehicles);
 
-let agentName = ref('').value;
-let agentLive = ref(false).value;
+let agentName = ref('');
+let agentLive = ref(false);
 let currentActivity = unit.activity;
 let currentVehicleIndex = computed(() => {
     return vehicles.value.findIndex(x => x.vehicleId == unit.vehicle);
@@ -90,64 +90,56 @@ const changeName = (): void => {
 const selectActivity = async (activityIndex: number): Promise<void> => {
     currentActivity = activityIndex;
 
-    const response: { message: string } = (
-        await useFetch(apiUrl + '/units/updateUnit', {
-            method: 'POST',
-            body: {
-                _id: unit._id,
-                unitVehicle: vehicles[currentVehicleIndex.value] == null ? -1 : vehicles[currentVehicleIndex.value].vehicleId,
-                unitActivity: currentActivity,
-                initiator: agentStore.agentInfo.name,
-            },
-        })
-    ).data.value as { message: string };
+    const response: { message: string } = await $fetch<{ message: string }>(apiUrl + '/units/updateUnit', {
+        method: 'POST',
+        body: {
+            _id: unit._id,
+            unitVehicle: vehicles[currentVehicleIndex.value] == null ? -1 : vehicles[currentVehicleIndex.value].vehicleId,
+            unitActivity: currentActivity,
+            initiator: agentStore.agentInfo.name,
+        },
+    });
 
     componentStore.sendNotification(response.message);
 };
 
 const selectVehicle = async (vehicleIndex: number): Promise<void> => {
-    const response: { message: string } = (
-        await useFetch(apiUrl + '/units/updateUnit', {
-            method: 'POST',
-            body: {
-                _id: unit._id,
-                unitVehicle: vehicles[vehicleIndex].vehicleId,
-                unitActivity: currentActivity,
-                initiator: agentStore.agentInfo.name,
-            },
-        })
-    ).data.value as { message: string };
+    const response: { message: string } = await $fetch<{ message: string }>(apiUrl + '/units/updateUnit', {
+        method: 'POST',
+        body: {
+            _id: unit._id,
+            unitVehicle: vehicles[vehicleIndex].vehicleId,
+            unitActivity: currentActivity,
+            initiator: agentStore.agentInfo.name,
+        },
+    });
 
     componentStore.sendNotification(response.message);
 };
 
 const deleteUnit = async (): Promise<void> => {
-    const response: { message: string } = (
-        await useFetch(apiUrl + '/units/deleteUnit', {
-            method: 'DELETE',
-            body: {
-                unitId: unit._id,
-                initiator: agentStore.agentInfo.name,
-            },
-        })
-    ).data.value as { message: string };
+    const response: { message: string } = await $fetch<{ message: string }>(apiUrl + '/units/deleteUnit', {
+        method: 'DELETE',
+        body: {
+            unitId: unit._id,
+            initiator: agentStore.agentInfo.name,
+        },
+    });
 
     componentStore.sendNotification(response.message);
 };
 
 const addAgent = async (): Promise<void> => {
-    const response: { message: string } = (
-        await useFetch(apiUrl + '/units/addAgentToUnit', {
-            method: 'POST',
-            body: {
-                initiator: agentStore.agentInfo.name,
-                unitId: unit._id,
-                agentName: agentName,
-                agentId: agentStore.agentInfo._id,
-                agentLive: agentLive,
-            },
-        })
-    ).data.value as { message: string };
+    const response: { message: string } = await $fetch<{ message: string }>(apiUrl + '/units/addAgentToUnit', {
+        method: 'POST',
+        body: {
+            initiator: agentStore.agentInfo.name,
+            unitId: unit._id,
+            agentName: agentName.value,
+            agentId: agentStore.agentInfo._id,
+            agentLive: agentLive,
+        },
+    });
 
     componentStore.sendNotification(response.message);
 };
@@ -155,14 +147,14 @@ const addAgent = async (): Promise<void> => {
 const onAddAgentKeyup = (event: KeyboardEvent): void => {
     if (event.key == 'Enter') {
         addAgent();
-        agentName = '';
-        agentLive = false;
+        agentName.value = '';
+        agentLive.value = false;
     }
 };
 
 const removeAgentFromUnit = async (agentName: string): Promise<void> => {
     const response: { message: string } = (
-        await useFetch(apiUrl + '/units/removeAgentFromUnit', {
+        await $fetch<{ message: string }>(apiUrl + '/units/removeAgentFromUnit', {
             method: 'DELETE',
             body: {
                 initiator: agentStore.agentInfo.name,
@@ -171,7 +163,7 @@ const removeAgentFromUnit = async (agentName: string): Promise<void> => {
                 agentId: agentStore.agentInfo._id,
             },
         })
-    ).data.value as { message: string };
+    );
 
     componentStore.sendNotification(response.message);
 };

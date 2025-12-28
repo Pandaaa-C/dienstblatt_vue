@@ -14,7 +14,7 @@ import { apiUrl } from '@/config';
 import { useAgentStore } from '@/store/agentStore';
 import { useComponentStore } from '@/store/componentStore';
 
-const name = ref('').value;
+const name = ref('');
 const agentStore = useAgentStore();
 
 const close = (): void => {
@@ -25,14 +25,14 @@ const submit = async (): Promise<void> => {
     close();
 
     const response: { message: string } = (
-        await useFetch(apiUrl + '/units/addUnit', {
+        await $fetch<{ message: string }>(apiUrl + '/units/addUnit', {
             method: 'POST',
             body: {
-                unitName: name,
+                unitName: name.value,
                 initiator: agentStore.agentInfo.name,
             },
         })
-    ).data.value as { message: string };
+    );
 
     useComponentStore().sendNotification(response.message);
 };

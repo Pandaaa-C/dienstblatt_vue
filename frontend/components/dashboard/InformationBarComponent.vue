@@ -139,14 +139,12 @@ const operationAgents = computed((): number | undefined => {
 });
 
 const takeOverLeitstelle = async () => {
-    const response: { message: string } = (
-        await useFetch(apiUrl + '/info/takeOverLeitstelle', {
-            method: 'POST',
-            body: {
-                agentId: agentStore.getAgentInfo._id,
-            },
-        })
-    ).data.value as { message: string };
+    const response: { message: string } = await $fetch<{ message: string }>(apiUrl + '/info/takeOverLeitstelle', {
+        method: 'POST',
+        body: {
+            agentId: agentStore.getAgentInfo._id,
+        },
+    });
 
     componentStore.sendNotification(response.message);
 };
@@ -154,15 +152,13 @@ const takeOverLeitstelle = async () => {
 const updateDefcon = async (): Promise<void> => {
     if (!adminPermission) return;
 
-    const response: { message: string } = (
-        await useFetch(apiUrl + '/info/updateDefconLevel', {
-            method: 'POST',
-            body: {
-                initiator: agentStore.agentInfo.name,
-                defcon: generalInfo.value.defcon,
-            },
-        })
-    ).data.value as { message: string };
+    const response: { message: string } = await $fetch<{ message: string }>(apiUrl + '/info/updateDefconLevel', {
+        method: 'POST',
+        body: {
+            initiator: agentStore.agentInfo.name,
+            defcon: generalInfo.value.defcon,
+        },
+    });
 
     componentStore.sendNotification(response.message);
 };
@@ -170,15 +166,13 @@ const updateDefcon = async (): Promise<void> => {
 const updateFunk = async (): Promise<void> => {
     if (!adminPermission) return;
 
-    const response: { message: string } = (
-        await useFetch(apiUrl + '/info/updateFunkCode', {
-            method: 'POST',
-            body: {
-                initiator: agentStore.agentInfo.name,
-                funk: generalInfo.value.funk,
-            },
-        })
-    ).data.value as { message: string };
+    const response: { message: string } = await $fetch<{ message: string }>(apiUrl + '/info/updateFunkCode', {
+        method: 'POST',
+        body: {
+            initiator: agentStore.agentInfo.name,
+            funk: generalInfo.value.funk,
+        },
+    });
 
     componentStore.sendNotification(response.message);
 };
@@ -187,14 +181,14 @@ const updateInfo = async (): Promise<void> => {
     if (!adminPermission) return;
 
     const response: { message: string } = (
-        await useFetch(apiUrl + '/info/updateGeneralInfo', {
+        await $fetch<{ message: string }>(apiUrl + '/info/updateGeneralInfo', {
             method: 'POST',
             body: {
                 initiator: agentStore.agentInfo.name,
                 message: generalInfo.value.globalInfo,
             },
         })
-    ).data.value as { message: string };
+    );
 
     componentStore.sendNotification(response.message);
 };
