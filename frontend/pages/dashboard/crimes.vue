@@ -131,7 +131,12 @@ let proof3 = ref('');
 
 const crimes = computed(() => {
     return searchInput.value.length < 1
-        ? crimeStore.crimes
+        ? crimeStore.crimes.sort((a, b) => {
+            let aDate = new Date(a.dateTime)
+            let bDate = new Date(b.dateTime)
+
+            return bDate.getTime() - aDate.getTime();
+        })
         : crimeStore.crimes.filter(
               (x: any) =>
                   x.wantedName.toLowerCase().includes(searchInput.value.toLowerCase()) ||
